@@ -62,6 +62,7 @@ async function run() {
     const database = client.db("food-sender");
     const usersCollection = database.collection("users");
     const foodsCollection = database.collection("foods");
+    const ordersCollection = database.collection("orders");
 
     //Get all foods API
     app.get("/foods", async (req, res) => {
@@ -71,14 +72,34 @@ async function run() {
     });
     //Get Single Food Api
     app.get('/placeOrder/:foodId', async (req, res) => {
-       console.log("hitted");
+       
       const id = req.params.foodId;
        const query = { _id: ObjectId(id) };
       const food = await foodsCollection.findOne(query);
       res.json(food); 
     }) 
-
+//get all orders
+    app.get('/orders', async (req, res) => {
+      const cursor = ordersCollection.find({});
+      const orders = await cursor.toArray();
+      res.send(orders)
+    })
     // POST API
+      // add new food offer
+    app.post("/foods", async (req, res) => {
+      const food = req.body;
+      const result = await foodsCollection.insertOne(food);
+      res.json(result);
+    });
+
+    //place a order post api 
+    app.post('/orders', async (req, res) => {
+      console.log('hitted');
+      const order = req.body;
+      const result = await ordersCollection.insertOne(order);
+      res.json(result);
+    })
+
 
     //Update API
 
