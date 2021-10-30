@@ -10,44 +10,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-/* const foods = [
-  {
-    title: "Cheeseburger with Salad",
-    description: "",
-    imgUrl: "https://i.ibb.co/D9hcBwb/food5.jpg",
-    price: 15,
-  },
-  {
-    title: "Royal Cheeseburger with Becon",
-    description: "",
-    imgUrl: "https://i.ibb.co/93rkKcm/food4.jpg",
-    price: 35,
-  },
-  {
-    title: "Shrimp & Olive Pizza ",
-    description: "",
-    imgUrl: "https://i.ibb.co/xqpMZyf/food3.jpg",
-    price: 30,
-  },
-  {
-    title: "Seafood Pizza",
-    description: "",
-    imgUrl: "https://i.ibb.co/Tw5rdgt/food2.jpg",
-    price: 22,
-  },
-  {
-    title: "Roll With Tuna",
-    description: "",
-    imgUrl: "https://i.ibb.co/fxX1W40/food1.jpg",
-    price: 35,
-  },
-  {
-    title: "Octopus Roll",
-    description: "",
-    imgUrl: "https://i.ibb.co/3B8DgRb/sushi-01-480x480.jpg",
-    price: 27,
-  },
-]; */
 
 //MONGODB
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.xyvia.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -84,6 +46,19 @@ async function run() {
       const orders = await cursor.toArray();
       res.send(orders)
     })
+
+//Get single user all orders
+    app.get('/userOrders/:email', async (req, res) => {
+      const id = req.params.email;
+
+      const cursor =  ordersCollection.find({ email: id });
+      const orders = await cursor.toArray();
+   
+      
+      res.json(orders);
+    })
+
+
     // POST API
       // add new food offer
     app.post("/foods", async (req, res) => {
@@ -94,7 +69,7 @@ async function run() {
 
     //place a order post api 
     app.post('/orders', async (req, res) => {
-      console.log('hitted');
+      
       const order = req.body;
       const result = await ordersCollection.insertOne(order);
       res.json(result);
