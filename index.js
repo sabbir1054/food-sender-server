@@ -70,12 +70,13 @@ async function run() {
       res.send(foods);
     });
     //Get Single Food Api
-    /* app.get('/placeOrder/:foodId', async (req, res) => {
+    app.get('/placeOrder/:foodId', async (req, res) => {
+       console.log("hitted");
       const id = req.params.foodId;
        const query = { _id: ObjectId(id) };
       const food = await foodsCollection.findOne(query);
       res.json(food); 
-    }) */
+    }) 
 
     // POST API
 
