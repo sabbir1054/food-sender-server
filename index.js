@@ -76,7 +76,22 @@ async function run() {
     })
 
 
-    //Update API
+    //Update order  condition API
+    app.put('/orders/:updateId', async (req, res) => {
+      const id = req.params.updateId;
+      const updateOrder = req.body;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          condition: 'approved'
+        },
+      };
+
+      const result = await ordersCollection.updateOne(filter, updateDoc, options)
+      res.json(result);
+    })
+
 
     // delete api
     app.delete("/orders/:deleteId", async (req, res) => {
@@ -98,9 +113,7 @@ run().catch(console.dir);
 app.get("/", (req, res) => {
   res.send("Server Is Running ");
 });
-/* app.get("/foods", (req, res) => {
-  res.send(foods);
-}); */
+
 //server port response
 app.listen(port, () => {
   console.log("Listen from", port);
