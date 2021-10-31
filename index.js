@@ -79,6 +79,15 @@ async function run() {
     //Update API
 
     // delete api
+    app.delete("/orders/:deleteId", async (req, res) => {
+      const id = req.params.deleteId;
+      const query = { _id: ObjectId(id) };
+      const result = await ordersCollection.deleteOne(query);
+      res.json(result);
+    });
+
+
+
   } finally {
     // await client.close();
   }
